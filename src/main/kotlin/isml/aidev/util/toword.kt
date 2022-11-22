@@ -1,8 +1,8 @@
 package isml.aidev.util
 
 import isml.aidev.RuleEdge
-import isml.aidev.Symbol
 import isml.aidev.SymbolsNode
+import isml.aidev.grammar.Symbol
 import org.api4.java.datastructure.graph.ILabeledPath
 
 fun ILabeledPath<SymbolsNode, RuleEdge>.toWord(): String {

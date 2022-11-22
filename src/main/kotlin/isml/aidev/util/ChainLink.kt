@@ -13,5 +13,5 @@ class ChainLink<T>(val value: T, var chain: Chain<T>) {
             if (value?.pred != this) value?.pred = this
         }
 
-    fun substitute(newChain: Chain<T>?) = chain.substitute(this, newChain)
+    fun substitute(newChain: Chain<T>?) = chain.replace(this, newChain)
 }

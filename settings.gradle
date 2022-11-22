@@ -1,1 +1,3 @@
 rootProject.name = "mcts-fuzz"
+include 'symbolic-regression'
+

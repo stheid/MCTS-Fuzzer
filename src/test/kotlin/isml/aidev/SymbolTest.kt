@@ -1,5 +1,6 @@
 package isml.aidev
 
+import isml.aidev.grammar.Symbol
 import org.junit.jupiter.api.Test
 
 internal class SymbolTest {

@@ -47,7 +47,7 @@ class Chain<T>(list: List<T>) : Sequence<T> {
      * will basically clear all references to "this" and nit in references to the start and end of chain.
      * @return return the provided chain object embedded in the larger chain
      */
-    fun substitute(oldLink: ChainLink<T>, newChain: Chain<T>?) {
+    fun replace(oldLink: ChainLink<T>, newChain: Chain<T>?) {
         if (oldLink.chain != this) {
             throw IllegalArgumentException("The provided ChainLink is not part of the chain. Can't substitute")
         }

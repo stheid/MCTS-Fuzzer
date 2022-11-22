@@ -1,0 +1,29 @@
+expr:
+  '"(" unop expr ")"': 1
+  'fun "(" expr ")"': 5
+  '"(" expr binop expr ")"': 15
+  literal: 10
+  var: 10
+
+unop:
+  - '"-"'
+
+fun:
+  - '"abs"'
+  - '"sqrt"'
+  - '"exp"'
+  - '"log"'
+  - '"sin"'
+
+binop:
+  - '"+"'
+  - '"-"'
+  - '"*"'
+  - '"/"'
+#  - '"**"'
+
+var:
+  - '"a" . "j"'
+
+literal:
+  - '"0" . "10"'

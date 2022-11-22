@@ -1,6 +1,6 @@
 package isml.aidev
 
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Test/*
 
 internal class SymbolsNodeTest {
     @Test
@@ -41,4 +41,4 @@ internal class SymbolsNodeTest {
         }
         assert(node.remainingNTs.size == 3)
     }
-}
+}*/

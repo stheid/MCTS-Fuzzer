@@ -8,6 +8,7 @@ import ai.libs.jaicore.search.algorithms.mdp.mcts.uct.UCTFactory
 import ai.libs.jaicore.search.algorithms.standard.mcts.MCTSPathSearchFactory
 import ai.libs.jaicore.search.model.other.EvaluatedSearchGraphPath
 import ai.libs.jaicore.search.probleminputs.GraphSearchWithPathEvaluationsInput
+import isml.aidev.grammar.Grammar
 import isml.aidev.starlib.PCFGSearchInput
 import isml.aidev.util.toWord
 import kotlinx.coroutines.channels.Channel
@@ -27,13 +28,15 @@ class Algorithm(
     private lateinit var solution: EvaluatedSearchGraphPath<SymbolsNode, RuleEdge, Double>
 
     init {
+        // construct a search problem that is in alignment to the graphgenerator and so on
         val rawInput = PCFGSearchInput(
             // parse grammar to object representation of the grammar
             Grammar.fromFile(grammarPath)
         )
 
-        // create a version with costs
-        val input = GraphSearchWithPathEvaluationsInput(rawInput) {
+        // create attach an evaluator to it
+        val problem = GraphSearchWithPathEvaluationsInput(rawInput) {
+            // this function is executed after each input sampled through the MCTS
             runBlocking {
                 inputChannel.send(it.toWord().toByteArray())
                 covChannel.receive()
@@ -43,15 +46,14 @@ class Algorithm(
         // create MCTS algorithm
         val factory = MCTSPathSearchFactory<SymbolsNode, RuleEdge>()
         val uct = UCTFactory<SymbolsNode, RuleEdge>().withDefaultPolicy { symbols, rules ->
-            val stopExtending = symbols.depth > maxPathLength
-
-            rules.toList().choice(
-                p = rules.map { it.weight * if (stopExtending && it.isExtending) 1e-10 else 1.0 }.toDoubleArray()
-                    .normalize()
-            )
+            if (symbols.depth < maxPathLength) {
+                rules.toList().choice(rules.map { it.weight.toDouble() }.toDoubleArray().normalize())
+            } else {
+                rules.minBy { it.expectedSymbols }
+            }
         }
         uct.withMaxIterations(maxIterations)
-        val mcts = factory.withMCTSFactory(uct).withProblem(input).algorithm
+        val mcts = factory.withMCTSFactory(uct).withProblem(problem).algorithm
 
         if (!headless) {
             val window = AlgorithmVisualizationWindow(mcts)

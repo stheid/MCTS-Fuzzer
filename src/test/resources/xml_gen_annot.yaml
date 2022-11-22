@@ -1,11 +1,7 @@
 # startword
-elem:
+elem[i<3]:
   - 'makeAlphaString attributes maybeChildren'
-elem2:
-  - 'makeAlphaString attributes maybeChildren2'
-elem3:
-  - 'makeAlphaString attributes maybeChildren3'
-elem4:
+elem:
   - 'makeAlphaString attributes boolFalse boolFalse boolFalse'
 
 # geom(2) - constant 1
@@ -25,41 +21,13 @@ maybeChildren:
 # geom(4) - constant 1
 children:
   '_1_from4Geo': 0.25
-  '_2_from4Geo elem2': 0.1875
-  '_3_from4Geo elem2 elem2': 0.140625
-  '_4_from4Geo elem2 elem2 elem2': 0.10546875
-  '_5_from4Geo elem2 elem2 elem2 elem2': 0.0791015625
-  '_6_from4Geo elem2 elem2 elem2 elem2 elem2': 0.059326171875
-  '_7_from4Geo elem2 elem2 elem2 elem2 elem2 elem2': 0.04449462890625
-  '_8_from4Geo elem2 elem2 elem2 elem2 elem2 elem2 elem2': 0.0333709716796875
-
-maybeChildren2:
-  - 'boolTrue children2'
-  - 'boolFalse maybeText'
-
-children2:
-  '_1_from4Geo': 0.25
-  '_2_from4Geo elem3': 0.1875
-  '_3_from4Geo elem3 elem3': 0.140625
-  '_4_from4Geo elem3 elem3 elem3': 0.10546875
-  '_5_from4Geo elem3 elem3 elem3 elem3': 0.0791015625
-  '_6_from4Geo elem3 elem3 elem3 elem3 elem3': 0.059326171875
-  '_7_from4Geo elem3 elem3 elem3 elem3 elem3 elem3': 0.04449462890625
-  '_8_from4Geo elem3 elem3 elem3 elem3 elem3 elem3 elem3': 0.0333709716796875
-
-maybeChildren3:
-  - 'boolTrue children3'
-  - 'boolFalse maybeText'
-
-children3:
-  '_1_from4Geo': 0.25
-  '_2_from4Geo elem4': 0.1875
-  '_3_from4Geo elem4 elem4': 0.140625
-  '_4_from4Geo elem4 elem4 elem4': 0.10546875
-  '_5_from4Geo elem4 elem4 elem4 elem4': 0.0791015625
-  '_6_from4Geo elem4 elem4 elem4 elem4 elem4': 0.059326171875
-  '_7_from4Geo elem4 elem4 elem4 elem4 elem4 elem4': 0.04449462890625
-  '_8_from4Geo elem4 elem4 elem4 elem4 elem4 elem4 elem4': 0.0333709716796875
+  '[i+=1] _2_from4Geo elem': 0.1875
+  '[i+=1] _3_from4Geo elem elem': 0.140625
+  '[i+=1] _4_from4Geo elem elem elem': 0.10546875
+  '[i+=1] _5_from4Geo elem elem elem elem': 0.0791015625
+  '[i+=1] _6_from4Geo elem elem elem elem elem': 0.059326171875
+  '[i+=1] _7_from4Geo elem elem elem elem elem elem': 0.04449462890625
+  '[i+=1] _8_from4Geo elem elem elem elem elem elem elem': 0.0333709716796875
 
 maybeText:
   - 'boolTrue text'
@@ -99,16 +67,14 @@ makeAlphaString:
   '_19_from10Geo byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.015009463529699918
   '_20_from10Geo byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.013508517176729929
 
-makeDictString:
+#makeDictString:
   # For the ant.dict
-  - '"\x11"'
 #  - '"\x00" . "\x74"'
   # for the mvn.dict
   # '"\x00" . "\x8c"': 1
 
 byte:
-#  - '"\x00" . "\xFF"'
-  - '"\x10"'
+  - '"\x00" . "\xFF"'
 
 boolTrue:
   - '"\x01"'

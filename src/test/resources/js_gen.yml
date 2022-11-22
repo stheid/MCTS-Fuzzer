@@ -1,0 +1,309 @@
+gen:
+  - 'genStmt'
+
+# generateStatement
+# true is || with stmtDepth>=maxStmtDepth
+genStmt[i<6]:
+  - 'true zero genExpr'
+  - 'true one' # break
+  - 'true two' # continue
+  - 'true three genReturn'
+  - 'true four genExpr' # throw
+  - 'true five genIdent' # var
+  - 'true six' # empty
+  - '[i+=1] false zero genIf'
+  - '[i+=1] false one genFor'
+  - '[i+=1] false two genExpr genBlock' # while
+  - '[i+=1] false three genNameFunc'
+  - '[i+=1] false four genExpr genCases' # switch
+  - '[i+=1] false five genBlock genIdent genBlock' # try catch
+  - '[i+=1] false six genBlock'
+
+genStmt:
+  - 'zero genExpr'
+  - 'one' # break
+  - 'two' # continue
+  - 'three genReturn'
+  - 'four genExpr' # throw
+  - 'five genIdent' # var
+  - 'six' # empty
+
+# generateExpression
+# true is || with exprDepth>=maxExprDepth
+genExpr[j<10]:
+  'true zero genLit': 8
+  'true one genIdent': 8
+  '[j+=1] false zero int genExpr genExpr': 2 # binary
+  '[j+=1] false one int genExpr': 2 # unary
+  '[j+=1] false two genExpr genExpr genExpr': 2 # ternary
+  '[j+=1] false three genExpr mean3Expr bool': 2 # call
+  '[j+=1] false four genFunc': 2
+  '[j+=1] false five genExpr genIdent': 2 # prop
+  '[j+=1] false six genExpr genExpr': 2 # idx
+  '[j+=1] false seven mean3Ident true genBlock': 1 # arrowfunc
+  '[j+=1] false seven mean3Ident false genExpr': 1 # arrowfunc
+
+genExpr:
+  - 'zero genLit'
+  - 'one genIdent'
+
+genReturn:
+  - 'true'
+  - 'false genExpr'
+
+genIdent[_k<100]:
+  - '[_k+=1] true int'
+  - 'false int'
+
+genIdent[_k==100]:
+  - 'int'
+
+genIf:
+  - 'genExpr genBlock true genBlock'
+  - 'genExpr genBlock false'
+
+genFor:
+  - 'genForExpr genForExpr genForExpr genBlock'
+
+genForExpr:
+  - 'true genExpr'
+  - 'false'
+
+genNameFunc:
+  - 'genIdent genFunc'
+
+# from scipy.stats import geom
+# from itertools import repeat
+# def gen(nts, mean=10, offset=0):
+#    for i in range(1, mean*2+1):
+#        print(f'\'_{i}geo{mean} {" ".join(repeat(nts,i+offset))}\': {geom(1/mean).pmf(i):.4f}')
+# gen('genIdent',5)
+genFunc:
+  '_1geo5 genIdent': 10.2000
+  '_2geo5 genIdent genIdent': 0.1600
+  '_3geo5 genIdent genIdent genIdent': 0.1280
+  '_4geo5 genIdent genIdent genIdent genIdent': 0.1024
+  '_5geo5 genIdent genIdent genIdent genIdent genIdent': 0.0819
+  '_6geo5 genIdent genIdent genIdent genIdent genIdent genIdent': 0.0655
+  '_7geo5 genIdent genIdent genIdent genIdent genIdent genIdent genIdent': 0.0524
+  '_8geo5 genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent': 0.0419
+  '_9geo5 genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent': 0.0336
+  '_10geo5 genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent genIdent': 0.0268
+
+genBlock:
+  '_1geo4 genStmt': 10.2500
+  '_2geo4 genStmt genStmt': 0.1875
+  '_3geo4 genStmt genStmt genStmt': 0.1406
+  '_4geo4 genStmt genStmt genStmt genStmt': 0.1055
+  '_5geo4 genStmt genStmt genStmt genStmt genStmt': 0.0791
+  '_6geo4 genStmt genStmt genStmt genStmt genStmt genStmt': 0.0593
+  '_7geo4 genStmt genStmt genStmt genStmt genStmt genStmt genStmt': 0.0445
+  '_8geo4 genStmt genStmt genStmt genStmt genStmt genStmt genStmt genStmt': 0.0334
+
+
+# gen('genExpr genBlock',2)
+genCases:
+  '_1geo2 genExpr genBlock': 10.5000
+  '_2geo2 genExpr genBlock genExpr genBlock': 0.2500
+  '_3geo2 genExpr genBlock genExpr genBlock genExpr genBlock': 0.1250
+  '_4geo2 genExpr genBlock genExpr genBlock genExpr genBlock genExpr genBlock': 0.0625
+
+genLit[j<10]:
+  'true true mean3Expr': 1
+  'true false mean3Object': 1
+  'false nonNestingLit': 2
+
+genLit[j==10]:
+  - 'nonNestingLit'
+
+nonNestingLit:
+  - 'zero int'
+  - 'one bool'
+  - 'two asciiStr'
+  - 'three'
+  - 'four'
+  - 'five'
+
+# gen('byte',10)
+asciiStr:
+  '_1geo10 byte': 10.1000
+  '_2geo10 byte byte': 0.0900
+  '_3geo10 byte byte byte': 0.0810
+  '_4geo10 byte byte byte byte': 0.0729
+  '_5geo10 byte byte byte byte byte': 0.0656
+  '_6geo10 byte byte byte byte byte byte': 0.0590
+  '_7geo10 byte byte byte byte byte byte byte': 0.0531
+  '_8geo10 byte byte byte byte byte byte byte byte': 0.0478
+  '_9geo10 byte byte byte byte byte byte byte byte byte': 0.0430
+  '_10geo10 byte byte byte byte byte byte byte byte byte byte': 0.0387
+  '_11geo10 byte byte byte byte byte byte byte byte byte byte byte': 0.0349
+  '_12geo10 byte byte byte byte byte byte byte byte byte byte byte byte': 0.0314
+  '_13geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0282
+  '_14geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0254
+  '_15geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0229
+  '_16geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0206
+  '_17geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0185
+  '_18geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0167
+  '_19geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0150
+  '_20geo10 byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte byte': 0.0135
+
+
+mean3Expr:
+  '_1geo3 genExpr': 10.3333
+  '_2geo3 genExpr genExpr': 0.2222
+  '_3geo3 genExpr genExpr genExpr': 0.1481
+  '_4geo3 genExpr genExpr genExpr genExpr': 0.0988
+  '_5geo3 genExpr genExpr genExpr genExpr genExpr': 0.0658
+  '_6geo3 genExpr genExpr genExpr genExpr genExpr genExpr': 0.0439
+
+mean3Ident:
+  '_1geo3 genIdent': 10.3333
+  '_2geo3 genIdent genIdent': 0.2222
+  '_3geo3 genIdent genIdent genIdent': 0.1481
+  '_4geo3 genIdent genIdent genIdent genIdent': 0.0988
+  '_5geo3 genIdent genIdent genIdent genIdent genIdent': 0.0658
+  '_6geo3 genIdent genIdent genIdent genIdent genIdent genIdent': 0.0439
+
+mean3Object:
+  '_1geo3 genIdent genExpr': 10.3333
+  '_2geo3 genIdent genExpr genIdent genExpr': 0.2222
+  '_3geo3 genIdent genExpr genIdent genExpr genIdent genExpr': 0.1481
+  '_4geo3 genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr': 0.0988
+  '_5geo3 genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr': 0.0658
+  '_6geo3 genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr genIdent genExpr': 0.0439
+
+_1geo2:
+  - '"\x04\xa7\x37\xbd\x6f\x91\x43\x87"'
+_2geo2:
+  - '"\x1b\x49\xa4\x7a\x36\x37\x85\x7d"'
+_3geo2:
+  - '"\xfd\xbf\x74\xd3\xdc\xb9\x3a\x1f"'
+_4geo2:
+  - '"\x65\x7f\xba\x4b\x1d\x2e\x79\x7d"'
+
+_1geo3:
+  - '"\x32\x14\xf9\xec\x0b\xd1\xf0\x07"'
+_2geo3:
+  - '"\x11\x97\xae\x71\x80\x78\x93\x12"'
+_3geo3:
+  - '"\xd2\xf0\x39\x3e\x62\x1c\x80\xb9"'
+_4geo3:
+  - '"\x98\x49\x34\xb3\xd6\xc2\xbd\x4c"'
+_5geo3:
+  - '"\xc5\x56\x5f\xaf\x96\x00\x87\x38"'
+_6geo3:
+  - '"\x92\xf2\x9d\xbb\x32\x37\x7a\x3f"'
+
+_1geo4:
+  - '"\xde\xf2\x30\xa8\xf7\x47\xac\x5f"'
+_2geo4:
+  - '"\x5d\x87\x09\x7d\xc6\xe1\x15\x16"'
+_3geo4:
+  - '"\x8e\xb8\xc7\x5d\x75\x01\x16\xc8"'
+_4geo4:
+  - '"\xd3\x2f\x64\x12\xcf\xe5\x45\xdf"'
+_5geo4:
+  - '"\xa7\x66\xd0\x1e\xd3\x0d\x27\xf6"'
+_6geo4:
+  - '"\xab\x2b\x33\x7f\xa5\xd2\x92\xd7"'
+_7geo4:
+  - '"\x0a\xe5\x55\x87\xbe\x6e\x77\xaf"'
+_8geo4:
+  - '"\x62\x7d\x8e\x67\xa3\x09\x7a\x91"'
+
+_1geo5:
+  - '"\x19\xd5\x38\x58\x3e\x4d\xae\xc2"'
+_2geo5:
+  - '"\xc8\x29\xe2\x18\x36\x93\x82\x58"'
+_3geo5:
+  - '"\xb7\x03\xb5\xe9\x85\xed\x22\x7f"'
+_4geo5:
+  - '"\x0c\x2f\x44\x72\x3d\x99\x9f\xeb"'
+_5geo5:
+  - '"\xfd\x38\x76\x62\x48\xd4\x8c\x90"'
+_6geo5:
+  - '"\xf9\x66\xc9\xb6\x5d\x4e\x79\xe8"'
+_7geo5:
+  - '"\x68\xde\x00\xbf\x65\xe3\xbc\xb7"'
+_8geo5:
+  - '"\x39\x5f\x4d\xd7\xb3\x31\x77\xb6"'
+_9geo5:
+  - '"\xe6\xaa\x5c\xfb\x23\x66\x06\x24"'
+_10geo5:
+  - '"\x3f\x59\x79\x9b\xb9\x26\xff\x8e"'
+_1geo10:
+  - '"\x95\x50\x38\x7c\xb0\x57\x3b\xff"'
+_2geo10:
+  - '"\x68\x15\x7e\xd8\xcd\x9f\x72\x56"'
+_3geo10:
+  - '"\x88\xfa\xcb\x2c\x04\x06\x1d\xaf"'
+_4geo10:
+  - '"\xf0\xda\x30\x91\x4d\x00\x43\x7b"'
+_5geo10:
+  - '"\x44\xcd\x69\x55\x0a\x84\xe2\xba"'
+_6geo10:
+  - '"\x1c\x86\xca\x1d\xe4\xa4\xf9\xc1"'
+_7geo10:
+  - '"\x83\x11\x0e\x7e\xf6\x40\xf5\x17"'
+_8geo10:
+  - '"\xf5\x17\x19\xfe\x46\x89\xd3\xab"'
+_9geo10:
+  - '"\xf4\x5d\x69\x16\x69\xdc\xcc\x21"'
+_10geo10:
+  - '"\xca\x2c\x82\x2a\xf9\x5a\xcf\x61"'
+_11geo10:
+  - '"\x75\x71\xa8\xce\x7f\x97\xdc\x4e"'
+_12geo10:
+  - '"\xce\xd1\xd4\x4a\x61\xaa\x00\x94"'
+_13geo10:
+  - '"\xfe\xa2\xe5\xde\x65\xd6\x9f\x2d"'
+_14geo10:
+  - '"\x5a\xa1\x02\xf3\xbf\x11\xa9\xd5"'
+_15geo10:
+  - '"\x06\x73\x22\xfb\x04\x3a\xfc\x02"'
+_16geo10:
+  - '"\x65\x2e\x38\x83\xd8\x16\x31\xbb"'
+_17geo10:
+  - '"\x23\xed\x52\x43\x84\xb1\x09\xd9"'
+_18geo10:
+  - '"\xcd\xce\x58\x17\x7a\x4f\x03\xb1"'
+_19geo10:
+  - '"\xe8\xdb\x66\xeb\x36\xe0\xf9\x2e"'
+_20geo10:
+  - '"\x1b\xed\x7f\xdf\xbd\xff\x65\x2f"'
+
+bool:
+  - 'true'
+  - 'false'
+
+true:
+  - '"\x01"'
+
+false:
+  - '"\x00"'
+
+byte:
+    - '"\x00" . "\xFF"'
+
+digit:
+  - '"\x00" . "\x09"'
+
+int:
+  - 'digit digit digit digit'
+
+zero:
+  - '"\x00\x00\x00\x00"'
+one:
+  - '"\x00\x00\x00\x01"'
+two:
+  - '"\x00\x00\x00\x02"'
+three:
+  - '"\x00\x00\x00\x03"'
+four:
+  - '"\x00\x00\x00\x04"'
+five:
+  - '"\x00\x00\x00\x05"'
+six:
+  - '"\x00\x00\x00\x06"'
+seven:
+  - '"\x00\x00\x00\x07"'
